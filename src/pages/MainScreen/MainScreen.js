@@ -1,14 +1,13 @@
 import React from 'react';
-import './MainScreen.css'
 import {observer} from "mobx-react-lite";
-import ThreeScene from "../../components/ThreeScene";
-
+import ThreeBackground from "../../components/ThreeBackground";
+import './MainScreen.css'
 const MainScreen = observer(() => {
     return (
-        <div>
-            <ThreeScene /> {/* Вставьте ThreeScene компонент здесь */}
+        <div className='container'>
+            {/*<div className='rectangle'></div>*/}
+            <ThreeBackground/>
         </div>
     );
 });
-
 export default MainScreen;
