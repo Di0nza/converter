@@ -1,3 +1,55 @@
-.canvas{
-    background-color: wheat;
+/*.canvas{*/
+/*    !*background-color: wheat;*!*/
+/*    background-color: #1E1E1E;*/
+/*}*/
+
+@font-face {
+    font-family: 'Square Deal Font';
+    src: local('Square Deal Font'), url('../fonts/square-deal.ttf') format('truetype');
+    /* Другие форматы шрифта могут быть добавлены здесь */
+}
+
+.converter-container__content{
+    padding: 15px 35px 20px 15px;
+
+}
+.converter-container__inputs{
+    margin: 10px;
+    width: 30%; /* Ширина инпута */
+    padding: 17px 10px 10px 10px; /* Внутренний отступ */
+    border: none; /* Убираем границу инпута */
+    background: rgba(84, 84, 84, 0.50); /* Полупрозрачный фон */
+    backdrop-filter: blur(5px); /* Применяем размытие фона */
+    border-radius: 5px; /* Скругляем углы */
+    color: #ffffff; /* Цвет текста */
+    font-size: 30px; /* Размер шрифта */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    font-family: 'Square Deal Font', sans-serif;
+    letter-spacing: 1px;
+
+}
+
+.converter-container__inputs:focus{
+    outline: none;
+    box-shadow: 0 0 20px rgba(51, 48, 48, 0.8);
+    border: none;
+    background: transparent;
+}
+
+.converter-container__inputs::-webkit-input-placeholder {
+    color: transparent; /* Делаем текст плейсхолдера прозрачным, чтобы скрыть каретку */
+}
+
+
+.converter-container__labels{
+    font-family: 'Koulen', sans-serif;
+    color: white;
+    font-size: 1.5rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
