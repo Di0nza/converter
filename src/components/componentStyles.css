@@ -11,22 +11,35 @@
 
 .converter-container__content{
     padding: 15px 35px 20px 15px;
-
 }
-.converter-container__inputs{
+
+.converter-container__button{
     margin: 10px;
     width: 30%; /* Ширина инпута */
-    padding: 17px 10px 10px 10px; /* Внутренний отступ */
+    padding: 8px 8px 8px 8px; /* Внутренний отступ */
     border: none; /* Убираем границу инпута */
     background: rgba(84, 84, 84, 0.50); /* Полупрозрачный фон */
     backdrop-filter: blur(5px); /* Применяем размытие фона */
     border-radius: 5px; /* Скругляем углы */
     color: #ffffff; /* Цвет текста */
-    font-size: 30px; /* Размер шрифта */
+    font-size: 2rem; /* Размер шрифта */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    font-family: 'VT323', sans-serif;
+}
+
+.converter-container__inputs{
+    margin: 10px;
+    width: 30%; /* Ширина инпута */
+    padding: 15px 8px 8px 8px; /* Внутренний отступ */
+    border: none; /* Убираем границу инпута */
+    background: rgba(84, 84, 84, 0.50); /* Полупрозрачный фон */
+    backdrop-filter: blur(5px); /* Применяем размытие фона */
+    border-radius: 5px; /* Скругляем углы */
+    color: #ffffff; /* Цвет текста */
+    font-size: 25px; /* Размер шрифта */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     font-family: 'Square Deal Font', sans-serif;
     letter-spacing: 1px;
-
 }
 
 .converter-container__inputs:focus{
@@ -40,11 +53,44 @@
     color: transparent; /* Делаем текст плейсхолдера прозрачным, чтобы скрыть каретку */
 }
 
-
 .converter-container__labels{
-    font-family: 'Koulen', sans-serif;
+    /*font-family: 'Koulen', sans-serif;*/
+    font-family: 'VT323', sans-serif;
     color: white;
-    font-size: 1.5rem;
+    font-size: 2rem;
+}
+
+
+.converter-container__text{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'VT323', sans-serif;
+    font-size: 40px;
+    color: white;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.converter-container__select {
+    margin: 10px;
+    width: 30%; /* Ширина инпута */
+    padding: 8px 8px 8px 8px; /* Внутренний отступ */
+    border: none; /* Убираем границу инпута */
+    background: rgba(84, 84, 84, 0.50); /* Полупрозрачный фон */
+    backdrop-filter: blur(5px); /* Применяем размытие фона */
+    border-radius: 5px; /* Скругляем углы */
+    color: #ffffff; /* Цвет текста */
+    font-size: 2rem; /* Размер шрифта */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    font-family: 'VT323', sans-serif;
+    max-height: 200px; /* Устанавливаем желаемую максимальную высоту */
+}
+
+.converter-container__select:focus{
+    outline: none;
+    border: none;
+    max-height: 200px;
 }
 
 input::-webkit-outer-spin-button,

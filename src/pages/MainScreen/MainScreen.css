@@ -10,9 +10,9 @@
 
 .rectangle {
     position: absolute;
-    left: 20px;
+    left: 50px;
     width: 50%;
-    height: 90%;
+    height: 73%;
     background: rgba(84, 84, 84, 0.50);
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);

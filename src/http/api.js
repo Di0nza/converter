@@ -1,13 +1,14 @@
 import {$host} from './index'
 
 
-export const getDefaultCurrencies = async () =>{
-    const {data} = await $host.get('api/currency/default');
+export const getDefaultCurrencies = async (curNamesArr) =>{
+    console.log(curNamesArr)
+    const {data} = await $host.post('api/currency/default', curNamesArr);
     return data;
 }
 
-export const getCurrencies = async () =>{
-    const {data} = await $host.get('api/currency/');
+export const getCurrencyLabels = async () => {
+    const {data} = await $host.get('api/currency/labels')
     return data;
 }
 

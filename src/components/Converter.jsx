@@ -1,109 +1,125 @@
 import React, {useEffect, useState} from 'react';
 import './componentStyles.css'
-import {getCurrencies, getDefaultCurrencies, getSpecialCurrency} from "../http/api";
+import {getCurrencyLabels, getDefaultCurrencies, getSpecialCurrency} from "../http/api";
 const Converter = () => {
-    const [curArr, setCurErr]= useState([]);
-    const [usdValue, setUsdValue] = useState('');
-    const [eurValue, setEurValue] = useState('');
-    const [rubValue, setRubValue] = useState('');
-    const [bynValue, setBynValue] = useState('');
-    const [convertTrigger, setConvertTrigger] = useState({cur:'',amount:''})
+    const [curArr, setCurArr] = useState([
+        {name: 'USD', amount: ''},
+        {name: 'EUR', amount: ''},
+        {name: 'RUB', amount: ''},
+        {name: 'BYN', amount: ''},
+    ]);
+
+    const [convertTrigger, setConvertTrigger] = useState({cur: '', amount: ''})
     const [firstLoad, setFirstLoad] = useState(true)
+    const [curLabels, setCurLabels] = useState([]);
 
-    const handleUsdChange = (event) => {
-        setUsdValue(event.target.value);
-        setConvertTrigger({cur:'USD',amount: event.target.value});
+    const [selectedCurrencyToAdd, setSelectedCurrencyToAdd] = useState(''); // Состояние для выбранной валюты
+
+    const handleCurrencyToAddChange = (event) => {
+        setSelectedCurrencyToAdd(event.target.value);
+        setCurArr([...curArr, {name: event.target.value, amount: ''}])
+        setConvertTrigger({cur: curArr[0].name, amount: curArr[0].amount})
     };
 
-    const handleEurChange = (event) => {
-        setEurValue(event.target.value);
-        setConvertTrigger({cur:'EUR',amount: event.target.value});
-    };
-
-    const handleRubChange = (event) => {
-        setRubValue(event.target.value);
-        setConvertTrigger({cur:'RUB',amount: event.target.value});
-    };
-
-    const handleBynChange = (event) => {
-        setBynValue(event.target.value);
-        setConvertTrigger({cur:'BYN',amount: event.target.value});
+    const handleCurChange = (index, event) => {
+        let data = [...curArr];
+        data[index].amount = event.target.value;
+        setCurArr(data);
+        setConvertTrigger({cur: data[index].name, amount: data[index].amount});
     };
 
     const convert = (trigger, value) => {
-        getSpecialCurrency({cur: trigger, value: value}).then((data)=>{
-            setBynValue(data[0].value);
-            setEurValue(data[1].value);
-            setRubValue(data[2].value);
-            setUsdValue(data[3].value);
+        const curNamesArr = curArr.map(item=> item.name)
+        getSpecialCurrency({cur: trigger, value: value, curNamesArr: curNamesArr}).then((data) => {
+            const newData = [...curArr];
+            data.forEach((currency)=>{
+                const {CurAbbreviation, value} = currency;
+                const currencyToUpdate = newData.find((item)=> item.name === CurAbbreviation);
+                if (currencyToUpdate){
+                    currencyToUpdate.amount = value;
+                }
+            })
+            setCurArr(newData);
         });
     }
 
-    useEffect(()=>{
-        getDefaultCurrencies().then((data)=>{
-            console.log(data)
-            setBynValue(data[0].value);
-            setEurValue(data[1].value);
-            setRubValue(data[2].value);
-            setUsdValue(data[3].value);
+
+
+    useEffect(() => {
+        const curNamesArr = curArr.map(item=> item.name);
+        getDefaultCurrencies(curNamesArr).then((data) => {
+            const newData = [...curArr];
+            data.forEach((currency)=>{
+                const {CurAbbreviation, value} = currency;
+                const currencyToUpdate = newData.find((item)=> item.name === CurAbbreviation);
+                if (currencyToUpdate){
+                    currencyToUpdate.amount = value;
+                }
+            })
+            setCurArr(newData);
             setFirstLoad(false)
         })
-    },[])
+        getCurrencyLabels().then((data) => {
+            setCurLabels(data.filter((currency) => !curArr.some((item) => item.name === currency)));
+        })
+    }, [])
 
-    useEffect(()=>{
-        if(!firstLoad) {
+
+
+    useEffect(() => {
+        if (!firstLoad) {
             console.log(convertTrigger.cur, convertTrigger.amount)
             convert(convertTrigger.cur, convertTrigger.amount);
+            console.log(curArr)
         }
-    },[convertTrigger])
+    }, [convertTrigger]);
 
-
+    useEffect(() => {
+        setCurLabels(curLabels.filter((currency) => !curArr.some((item) => item.name === currency)));
+    }, [curArr])
 
 
     return (
         <div className='converter-container__content'>
-            <div className="converter-container__item">
-                <label className='converter-container__labels' htmlFor="usd">USD:</label>
-                <input
-                    className='converter-container__inputs'
-                    type="text"
-                    id="usd"
-                    value={usdValue}
-                    onChange={handleUsdChange}
-                />
+            <div className='converter-container__text'>
+                Exchange rates from the National Bank
             </div>
+
+            {curArr.map((cur, index) => {
+                return (
+                    <div className='converter-container__item'>
+                        <label className='converter-container__labels'>{cur.name}:</label>
+                        <input className='converter-container__inputs'
+                               type="text"
+                               id={index}
+                               value={cur.amount}
+                               onChange={event => handleCurChange(index, event)}/>
+                    </div>
+                )
+            })}
+
             <div className="converter-container__item">
-                <label className='converter-container__labels' htmlFor="eur">EUR:</label>
-                <input
-                    className='converter-container__inputs'
-                    type="text"
-                    id="eur"
-                    value={eurValue}
-                    onChange={handleEurChange}
-                />
-            </div>
-            <div className="converter-container__item">
-                <label className='converter-container__labels' htmlFor="rub">RUB:</label>
-                <input
-                    className='converter-container__inputs'
-                    type="text"
-                    id="rub"
-                    value={rubValue}
-                    onChange={handleRubChange}
-                />
-            </div>
-            <div className="converter-container__item">
-                <label className='converter-container__labels' htmlFor="byn">BYN:</label>
-                <input
-                    className='converter-container__inputs'
-                    type="text"
-                    id="byn"
-                    value={bynValue}
-                    onChange={handleBynChange}
-                />
+                <div>
+                    <select
+                        className="converter-container__select"
+                        id="currencyDropdown"
+                        onChange={handleCurrencyToAddChange}
+                        value={selectedCurrencyToAdd}
+                    >
+
+                        <option className="converter-container__option" value=""> + Add currency</option>
+                        {curLabels.map((label, index) => (
+                            <option className="converter-container__option" key={index} value={label}>
+                                {label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
         </div>
     );
+
+
 };
 
 export default Converter;

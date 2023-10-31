@@ -1,7 +1,5 @@
 import React, {Suspense} from 'react';
 import {Canvas, useFrame} from "@react-three/fiber";
-import Box from "./Box";
-import AnimatedSphere from './AnimatedSphere'
 import ConverterFactory from './Factory'
 import './componentStyles.css'
 import {OrbitControls} from "@react-three/drei";
