@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: 'Square Deal Font';
-    src: local('Square Deal Font'), url('../fonts/square-deal.ttf') format('truetype');
+    src: local('Square Deal Font'), url('../../public/fonts/square-deal.ttf') format('truetype');
     /* Другие форматы шрифта могут быть добавлены здесь */
 }
 

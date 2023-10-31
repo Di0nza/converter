@@ -2,14 +2,48 @@ import React, {useEffect, useState} from 'react';
 import './componentStyles.css'
 import {getCurrencyLabels, getCurrencies} from "../http/api";
 
+const getSavedCurrencies = ()=>{
+    const curToSaveObject = {
+        savedCurrencies: [
+            {abbreviation: 'USD', amount: '1'},
+            {abbreviation: 'EUR', amount: ''},
+            {abbreviation: 'RUB', amount: ''},
+            {abbreviation: 'BYN', amount: ''}
+        ]
+    };
+    const curToSaveString = JSON.stringify(curToSaveObject)
+
+    const savedCurString = localStorage.getItem('currencies');
+    if (savedCurString) {
+        // Если данные найдены, преобразуем их обратно в объект
+        const savedCurObject = JSON.parse(savedCurString);
+
+        // Теперь savedData содержит извлеченные данные
+        const restoredSavedCurArr = savedCurObject.savedCurrencies;
+        console.log(restoredSavedCurArr);
+        return restoredSavedCurArr;
+    }else {
+        localStorage.setItem('currencies', curToSaveString);
+        return curToSaveObject.savedCurrencies;
+    }
+}
+
+const updateSavedCurrencies = (curArr) =>{
+    const curToSaveObject = {
+        savedCurrencies: []
+    };
+    curToSaveObject.savedCurrencies = curArr;
+    const curToSaveString = JSON.stringify(curToSaveObject);
+    localStorage.setItem('currencies', curToSaveString);
+}
+
+
 const Converter = () => {
+
+
+
     //Массив валют, которые отображаются на страницы с инпутами
-    const [curArr, setCurArr] = useState([
-        {abbreviation: 'USD', amount: ''},
-        {abbreviation: 'EUR', amount: ''},
-        {abbreviation: 'RUB', amount: ''},
-        {abbreviation: 'BYN', amount: ''},
-    ]);
+    const [curArr, setCurArr] = useState(getSavedCurrencies);
 
     /*Массив аббревиатур валют, которые будут на странице в независимости от выбранных пользователем валют*/
     const baseCurrencies = ['USD', 'EUR', 'RUB', 'BYN'];
@@ -27,6 +61,7 @@ const Converter = () => {
     const handleCurrencyToAddChange = (event) => {
         setSelectedCurrencyToAdd(event.target.value);
         setCurArr([...curArr, {abbreviation: event.target.value, amount: ''}]);
+        updateSavedCurrencies([...curArr, {abbreviation: event.target.value, amount: ''}]);
         setCurLabels(curLabels.filter((currency) => currency !== event.target.value));
         setConvertTrigger({abbreviation: curArr[0].abbreviation, amount: curArr[0].amount});
         //вызываю, чтобы произошла конвертация, после добавления новой валюты на страницу, можно было просто вызвать функцию convert()
@@ -36,13 +71,14 @@ const Converter = () => {
     const removeCurField = (index) => {
         let data = [...curArr];
         setSelectedCurrencyToAdd('')
-        const labels = [...curLabels, data[index].abbreviation].sort((a,b)=> a.localeCompare(b));
+        const labels = [...curLabels, data[index].abbreviation].sort((a, b) => a.localeCompare(b));
         setCurLabels(labels);
         /*эта сортировка выше не расхождение с тз, просто если пользователь удаляет валюту, которая ранее была
         добавлена, со страницы, то она попадает в конец списка доступных аббревиатур, поэтому чтобы лишний раз
         не делать запрос на сервер, я сортирую тут*/
         data.splice(index, 1);
         setCurArr(data);
+        updateSavedCurrencies(data);
     }
 
     /*Обработчик изменения значений в инпутах*/
@@ -50,6 +86,7 @@ const Converter = () => {
         let data = [...curArr];
         data[index].amount = event.target.value
         setCurArr(data);
+        updateSavedCurrencies(data);
         setConvertTrigger({abbreviation: data[index].abbreviation, amount: data[index].amount});
     };
 
@@ -69,30 +106,14 @@ const Converter = () => {
                 }
             })
             setCurArr(newData);
+            updateSavedCurrencies(newData);
         });
     }
 
-    /*Заполнение страницы данными при загрузке*/
-    useEffect(() => {
-        const curNamesArr = curArr.map(item => item.abbreviation);
-        getCurrencies({cur: 'USD', value: "1", curNamesArr: curNamesArr}).then((data) => {
-            const newData = [...curArr];
-            data.forEach((currency) => {
-                const {CurAbbreviation, value} = currency;
-                const currencyToUpdate = newData.find((item) => item.abbreviation === CurAbbreviation);
-                if (currencyToUpdate) {
-                    currencyToUpdate.amount = value;
-                }
-            })
-            setCurArr(newData);
-        })
-        getCurrencyLabels().then((data) => {
-            setCurLabels(data.filter((currency) => !curArr.some((item) => item.abbreviation === currency)));
-        })
-    }, [])
 
     /*Отслеживание изменения триггера, а так же логика с обработкой данных, если поле ввода - пустая строка*/
     useEffect(() => {
+
         if (convertTrigger.amount !== '') {
             convert(convertTrigger.abbreviation, convertTrigger.amount);
         } else {
@@ -103,7 +124,28 @@ const Converter = () => {
                 }
             }))
         }
+
     }, [convertTrigger]);
+
+    /*Заполнение страницы данными при загрузке*/
+    useEffect(() => {
+        const curNamesArr = curArr.map(item => item.abbreviation);
+        getCurrencies({cur: curArr[0].abbreviation, value: curArr[0].amount, curNamesArr: curNamesArr}).then((data) => {
+            const newData = [...curArr];
+            data.forEach((currency) => {
+                const {CurAbbreviation, value} = currency;
+                const currencyToUpdate = newData.find((item) => item.abbreviation === CurAbbreviation);
+                if (currencyToUpdate) {
+                    currencyToUpdate.amount = value;
+                }
+            })
+            setCurArr(newData);
+            updateSavedCurrencies(newData);
+        })
+        getCurrencyLabels().then((data) => {
+            setCurLabels(data.filter((currency) => !curArr.some((item) => item.abbreviation === currency)));
+        })
+    }, [])
 
     return (
         <div className='converter-container__content'>
