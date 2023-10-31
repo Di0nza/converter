@@ -1,18 +1,38 @@
 import {$host} from './index'
 
-
-export const getDefaultCurrencies = async (curNamesArr) =>{
-    console.log(curNamesArr)
-    const {data} = await $host.post('api/currency/default', curNamesArr);
-    return data;
-}
-
+/**Получение всех возможных аббревиатур валют*/
 export const getCurrencyLabels = async () => {
     const {data} = await $host.get('api/currency/labels')
     return data;
 }
+/**
+-------------------------------------------------------------------
+Пример тела ответа:
+[ "AUD", "AMD", "BGN", ... ]
+-------------------------------------------------------------------
+*/
 
-export const getSpecialCurrency = async (form) =>{
-    const {data} = await $host.post('api/currency/getSpecial', form);
+/**Получение результата конвертации по валютам добавленных на страницу*/
+export const getCurrencies = async (form) =>{
+    const {data} = await $host.post('api/currency/', form);
     return data;
 }
+/**
+-------------------------------------------------------------------
+Пример тела запроса:
+{cur: "USD", value: "1", curNamesArr: ["USD", "EUR", "RUB", "BYN"]}
+-------------------------------------------------------------------
+Пример тела ответа:
+[
+    {
+        "CurAbbreviation": "BYN",
+        "value": 3.1958
+    },
+    {
+        "CurAbbreviation": "USD",
+        "value": 1
+    },
+    ...
+]
+-------------------------------------------------------------------
+*/

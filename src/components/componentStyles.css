@@ -27,6 +27,18 @@
     font-family: 'VT323', sans-serif;
 }
 
+.converter-container__buttonDelete{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    color: #ffffff; /* Цвет текста */
+    font-size: 2rem; /* Размер шрифта */
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    font-family: 'VT323', sans-serif;
+}
+
 .converter-container__inputs{
     margin: 10px;
     width: 30%; /* Ширина инпута */
