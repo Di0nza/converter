@@ -8,6 +8,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path={'/'} element={<MainScreen/>}/>
+                <Route path={'/conversionTable'} element={<MainScreen/>}/>
             </Routes>
         </BrowserRouter>
     );

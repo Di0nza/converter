@@ -5,9 +5,9 @@ import './MainScreen.css'
 import {OrbitControls} from "@react-three/drei";
 import ConverterFactory from "../../components/Factory";
 import {Canvas, useFrame} from "@react-three/fiber";
-
 import { easing } from "maath"
 import Converter from "../../components/Converter";
+import ConverterTable from "../../components/ConverterTable";
 
 function Rig() {
     return useFrame((state, delta) => {
@@ -15,11 +15,12 @@ function Rig() {
     })
 }
 
-const MainScreen = observer(() => {
+const MainScreen = () => {
     return (
         <div className='container'>
             <div className="rectangle">
                 <Converter/>
+                <ConverterTable/>
             </div>
             {/*Сцена*/}
             <Canvas  camera={{position: [4, 2.1, 3], fov: 28}}>
@@ -33,9 +34,7 @@ const MainScreen = observer(() => {
                 <Rig/>
             </Canvas>
             {/*Сцена*/}
-
-
         </div>
     );
-});
+};
 export default MainScreen;
