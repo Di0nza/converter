@@ -3,7 +3,7 @@ import {Canvas, useFrame, useThree} from "@react-three/fiber";
 import ConverterFactory from './Factory'
 import './componentStyles.css'
 import {OrbitControls} from "@react-three/drei";
-import { easing } from "maath"
+import {easing} from "maath"
 
 function Rig() {
     return useFrame((state, delta) => {
@@ -13,17 +13,13 @@ function Rig() {
 
 const ThreeBackground = () => {
 
-    const {viewPort} = useThree();
-    const isMobile = window.innerWidth < 768;
 
     return (
         <Canvas camera={{position: [4, 2.1, 3], fov: 28}}>
             <OrbitControls enableRotate={false} enableZoom={false}/>
-            <group position={[-1, -2.3, -3]}>
-                <Suspense fallback={null}>
-                    <ConverterFactory/>
-                </Suspense>
-            </group>
+            <Suspense fallback={null}>
+                <ConverterFactory/>
+            </Suspense>
             {/*<axesHelper args={[1]} /> /!* Отображение осей координат (красная - X, зеленая - Y, синяя - Z) *!/*/}
             <Rig/>
         </Canvas>

@@ -46,19 +46,22 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
          Допустим нам пришли такие данные от нац банка:
          data = [
              {
-                 "Cur_Abbreviation": "USD",
-                 "Cur_Scale": 1,
-                 "Cur_OfficialRate": 3.162
+                 "abbreviation": "USD",
+                 "name": "U.S. dollar"
+                 "scale": 1,
+                 "rate": 3.162
              },
              {
-                 "Cur_Abbreviation": "EUR",
-                 "Cur_Scale": 1,
-                 "Cur_OfficialRate": 3.3692
+                 "abbreviation": "EUR",
+                 "name": "Euro"
+                 "scale": 1,
+                 "rate": 3.3692
              },
              {
-                 "Cur_Abbreviation": "RUB",
-                 "Cur_Scale": 100,
-                 "Cur_OfficialRate": 3.44
+                 "abbreviation": "RUB",
+                 "name": "Russian ruble"
+                 "scale": 100,
+                 "rate": 3.44
              }
          ]
          В следующем цикле мы вычисляем сколько в 1BYN будет иностранной валюты
@@ -66,14 +69,17 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
          массив oneBynToCur = [
             {
                 "CurAbbreviation": "USD",
+                ""CurFullName": "U.S. dollar",
                 "value": 1/3.162 = 0.3162 (ps. 1BYN = 0.3162 USD)
             },
             {
                 "CurAbbreviation": "EUR",
+                "CurFullName": "Euro",
                 "value": 1/3.3692 = 0.2968 (ps. 1BYN = 0.2968 EUR)
             },
             {
                 "CurAbbreviation": "RUB",
+                "CurFullName": "Russian ruble",
                 "value": 100/3.44 = 29.0697 (ps. 1BYN = 29.0697 RUB)
             }
          ]
@@ -83,6 +89,7 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
             if (curNamesArr.includes(item.abbreviation) && item.abbreviation) {
                 oneBynToCur.push({
                     CurAbbreviation: item.abbreviation,
+                    CurFullName: item.name,
                     value: (parseInt(item.scale) / parseFloat(item.rate)) //этот перевод, чтобы узнать сколько получим валюты из 1 бел руб
                 })
                 if (item.abbreviation === triggerCur) {
@@ -93,11 +100,7 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
 
 
         console.log('1byn = value \n', oneBynToCur)
-        /** Добавляем белорусские рубли вручную, т.к. нац.банк не отдает бел.руб отдельным элементом в массиве валют*/
-        resultCurrencies.push({
-            CurAbbreviation: 'BYN',
-            value: parseFloat((oneTriggerCurToByn * amount).toFixed(4))
-        })
+
 
         /**
          Теперь для того, чтобы получить результат конвертации мы должны получившиеся значения из предыдущего
@@ -106,19 +109,23 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
          resultCurrencies = [
             {
                 "CurAbbreviation": "USD",
+                "CurFullName": "U.S. dollar",
                 "value": 0.3162 * 3.162 * 1 = 1(ps. 1USD = 1 USD)
             },
             {
                 "CurAbbreviation": "EUR",
+                "CurFullName": "Euro",
                 "value": 0.2968 * 3.162 * 1 = 0.9384 (ps. 1USD = 0.9384 EUR)
             },
             {
                 "CurAbbreviation": "RUB",
+                "CurFullName": "Russian ruble",
                 "value": 29.0697 * 3.162 * 1 = 91.9186 (ps. 1USD = 91.9186 RUB)
             },
          //вручную добавленные белорусские рубли
             {
                 "CurAbbreviation": "BYN",
+                "CurFullName": "Belarusian ruble",
                 "value": 3.162 * 1 = 3.162 (ps. 1USD = 3.162 BYN)
             }
          ]
@@ -127,9 +134,16 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
             const calculatedValue = parseFloat(cur.value) * parseFloat(oneTriggerCurToByn) * amount;
             resultCurrencies.push({
                 CurAbbreviation: cur.CurAbbreviation,
+                CurFullName: cur.CurFullName,
                 value: parseFloat(calculatedValue.toFixed(4))
             })
         }
+        /** Добавляем белорусские рубли вручную, т.к. нац.банк не отдает бел.руб отдельным элементом в массиве валют*/
+        resultCurrencies.push({
+            CurAbbreviation: 'BYN',
+            CurFullName: 'Belarusian ruble',
+            value: parseFloat((oneTriggerCurToByn * amount).toFixed(4))
+        })
 
         console.log(resultCurrencies)
         return resultCurrencies;
@@ -145,35 +159,42 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
          resultCurrencies = [
             {
                 "CurAbbreviation": "USD",
+                "CurFullName": "U.S. dollar",
                 "value": 1/3.162 * 100 = 31.6255 (ps. 100BYN = 31.6255 USD)
             },
             {
                 "CurAbbreviation": "EUR",
+                "CurFullName": "Euro",
                 "value": 1/3.3692 * 100 = 29.6806 (ps. 100BYN = 29.6806 EUR)
             },
             {
                 "CurAbbreviation": "RUB",
+                "CurFullName": "Russian ruble",
                 "value": 100/3.44 * 100 = 2906.9767 (ps. 100BYN = 2906.9767 RUB)
             },
          //вручную добавленные белорусские рубли
             {
                 "CurAbbreviation": "BYN",
+                "CurFullName": "Belarusian ruble",
                 "value": 100
             }
          ]
          */
-        resultCurrencies.push({
-            CurAbbreviation: 'BYN',
-            value: amount
-        })
+
         for (const cur of data) {
             if (curNamesArr.includes(cur.abbreviation) && cur.abbreviation !== triggerCur) {
                 resultCurrencies.push({
                     CurAbbreviation: cur.abbreviation,
+                    CurFullName: cur.name,
                     value: parseFloat(((parseInt(cur.scale) / parseFloat(cur.rate)) * amount).toFixed(4))
                 })
             }
         }
+        resultCurrencies.push({
+            CurAbbreviation: 'BYN',
+            CurFullName: 'Belarusian ruble',
+            value: amount
+        })
         console.log(resultCurrencies)
         return resultCurrencies;
     }
@@ -223,7 +244,14 @@ class CurrencyController {
     async getLabels(req, res) {
         try {
             const data = await Currency.find();
-            const labels = data.map(item => item.abbreviation).sort((a, b) => a.localeCompare(b));
+            const labels = data.map(item => {
+                return(
+                    {
+                        CurAbbreviation: item.abbreviation,
+                        CurFullName: item.name
+                    }
+                )
+            }).sort((a, b) => a.CurAbbreviation.localeCompare(b.CurAbbreviation));
             return res.json(labels);
         } catch (e) {
             console.log(e.message);
@@ -288,7 +316,6 @@ class CurrencyController {
                     return 0;
                 }
             });
-
             return res.json(sortedResultConversion);
         } catch (e) {
             console.log(e.message);

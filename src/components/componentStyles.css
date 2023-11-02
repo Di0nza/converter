@@ -82,7 +82,30 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     font-family: 'VT323', sans-serif;
 }
+.converter-container-column__inputs{
+    display: none;
+    width: calc(100% - 150px); /* Ширина инпута */
+    padding: 15px 8px 8px 8px; /* Внутренний отступ */
+    background: rgba(84, 84, 84, 0.0);
+    border: 2px solid #656966;
+    border-radius: 10px; /* Скругляем углы */
+    color: #ffffff; /* Цвет текста */
+    font-size: 25px; /* Размер шрифта */
+    font-family: 'Square Deal Font', sans-serif;
+    letter-spacing: 1px;
+    caret-shape: inherit;
+    transition: 0.3s;
+}
 
+.converter-container-column__inputs:focus{
+    background: rgba(84, 84, 84, 0.1);
+    border: 2px solid #ffffff;
+}
+
+.converter-container-column__inputs::-webkit-input-placeholder {
+    margin-top: -10px;
+    color: rgba(23, 23, 23, 0.80); /* Делаем текст плейсхолдера прозрачным, чтобы скрыть каретку */
+}
 .converter-container__buttonDelete{
     background: none;
     border: none;
@@ -123,7 +146,8 @@
 .converter-container__scroll{
     position: relative;
     width: calc(100% - 30px);
-    max-height: 355px;
+    max-height: 370px;
+    height: 355px;
     margin: 0 0 20px 20px;
     overflow-y: scroll;
     z-index: 1;
@@ -151,16 +175,12 @@
     font-family: 'VT323', sans-serif;
     font-size: 25px;
     color: white;
-    text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    margin: 0 15px;
 }
 
 .converter-container__options-list{
-    background-color: #181818;
-    width: calc(100% - 30px);
+    width: calc(100%);
     margin-top: 10px;
-    padding: 0 0 0 20px;
-    height: 410px;
-    max-height: 380px;
     overflow-y: scroll;
     position: absolute;
     top: 0;
@@ -168,8 +188,12 @@
     z-index: 6;
 }
 .converter-container__option{
+    display: flex;
+    flex-direction: row; /* Устанавливаем направление в строку */
+    align-items: center;
     width: calc(100% - 32px);
     font-size: 30px;
+    justify-content: space-between;
     border-radius: 10px;
     margin: 5px 0;
     padding-bottom: 10px;
@@ -177,10 +201,13 @@
     color: white;
     cursor: pointer;
 }
+.converter-container__options-fullName{
+    color: #7c7a7a;
+}
 .converter-container__select {
     width: calc(100% - 55px);
     padding: 9px 8px 9px 8px;
-    margin: 0 20px 20px 20px;
+    margin: 0 20px 15px 20px;
     border: none;
     background: rgba(84, 84, 84, 0.50);
     backdrop-filter: blur(5px);
@@ -197,8 +224,8 @@
     display: flex;
     padding-right: 10px;
     flex-direction: column;
-    height: 388px;
-    max-height: 388px;
+    max-height: 383px;
+    height: 383px;
     overflow-y: scroll;
 }
 .converter-container__table-row{
@@ -230,4 +257,64 @@ input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+@media (max-width: 1300px) {
+
+}
+@media (max-width: 400px) {
+    .converter-sort-container{
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 40px);
+        padding: 0 20px;
+        margin: 0 0 15px;
+        justify-content: space-between;
+    }
+    .converter-sort-btn{
+        display: flex;
+        flex-direction: row;
+        width: calc(100% - 40px);
+        background-color: #303030;
+        border-radius: 10px;
+        margin-top: 15px;
+        justify-content: space-between;
+        padding: 10px 15px ;
+        cursor: pointer;
+    }
+    .converter-container__table{
+        max-height: 348px;
+        height: 348px;
+    }
+    /*.converter-container__table-row div{*/
+    /*    font-family: 'VT323', sans-serif;*/
+    /*    font-size: 10px;*/
+    /*}*/
+    /*.converter-container__table-row p{*/
+    /*    margin: 7px 0 0 0;*/
+    /*    font-size: 10px;*/
+    /*}*/
+}
+@media (max-width: 340px) {
+    .converter-container-column__inputs{
+        display: flex;
+        margin: 10px 0 15px;
+        width: calc(100% - 30px);
+    }
+    .converter-container__inputs{
+        display: none;
+    }
+    .converter-container-column__item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /*.converter-container__table-row div{*/
+    /*    font-family: 'VT323', sans-serif;*/
+    /*    font-size: 10px;*/
+    /*}*/
+    /*.converter-container__table-row p{*/
+    /*    margin: 7px 0 0 0;*/
+    /*    font-size: 10px;*/
+    /*}*/
 }

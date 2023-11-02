@@ -1,10 +1,10 @@
 export const getSavedCurrencies = () => {
     const curToSaveObject = {
         savedCurrencies: [
-            {abbreviation: 'USD', amount: '1'},
-            {abbreviation: 'EUR', amount: ''},
-            {abbreviation: 'RUB', amount: ''},
-            {abbreviation: 'BYN', amount: ''}
+            {abbreviation: 'USD', fullName:'U.S. dollar', amount: '1'},
+            {abbreviation: 'EUR', fullName:'Euro', amount: ''},
+            {abbreviation: 'RUB', fullName:'Russian ruble', amount: ''},
+            {abbreviation: 'BYN', fullName:'Belarusian ruble', amount: ''}
         ]
     };
     const curToSaveString = JSON.stringify(curToSaveObject)

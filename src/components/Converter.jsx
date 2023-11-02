@@ -18,9 +18,6 @@ const Converter = () => {
     /*Массив с аббревиатурами валют*/
     const [curLabels, setCurLabels] = useState([]);
 
-    /*Состояние для выбранной к добавлению валюты*/
-    const [selectedCurrencyToAdd, setSelectedCurrencyToAdd] = useState('');
-
     /*Флаг для дропдаун меню*/
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -30,22 +27,19 @@ const Converter = () => {
 
     /*Добавление валюты с инпутом на страницу */
     const handleCurrencyToAddChange = (selectedCurrency) => {
-        setSelectedCurrencyToAdd(selectedCurrency);
-        const updatedCurArr = [...curArr, { abbreviation: selectedCurrency, amount: '' }];
+        const updatedCurArr = [...curArr, { abbreviation: selectedCurrency.CurAbbreviation, fullName: selectedCurrency.CurFullName, amount: '' }];
         setCurArr(updatedCurArr);
         updateSavedCurrencies(updatedCurArr);
-        setCurLabels(curLabels.filter((currency) => currency !== selectedCurrency));
+        setCurLabels(curLabels.filter((currency) => currency.CurAbbreviation !== selectedCurrency.CurAbbreviation));
         setConvertTrigger({ abbreviation: updatedCurArr[0].abbreviation, amount: updatedCurArr[0].amount });
         //вызываю, чтобы произошла конвертация, после добавления новой валюты на страницу, можно было просто вызвать функцию convert()
         setShowDropdown(false);
-
     };
 
     /*Удаление валюты с инпутом со страницы*/
     const removeCurField = (index) => {
         let data = [...curArr];
-        setSelectedCurrencyToAdd('')
-        const labels = [...curLabels, data[index].abbreviation].sort((a, b) => a.localeCompare(b));
+        const labels = [...curLabels, {CurAbbreviation: data[index].abbreviation, CurFullName: data[index].fullName}].sort((a, b) => a.CurAbbreviation.localeCompare(b.CurAbbreviation));
         setCurLabels(labels);
         /*эта сортировка выше не расхождение с тз, просто если пользователь удаляет валюту, которая ранее была
         добавлена, со страницы, то она попадает в конец списка доступных аббревиатур, поэтому чтобы лишний раз
@@ -126,75 +120,99 @@ const Converter = () => {
             updateSavedCurrencies(newData);
         })
         getCurrencyLabels().then((data) => {
-            setCurLabels(data.filter((currency) => !curArr.some((item) => item.abbreviation === currency)));
+            setCurLabels(data.filter((currency) => !curArr.some((item) => item.abbreviation === currency.CurAbbreviation)));
         })
     }, [])
 
     return (
-        <div className='converter-container__content'
-             style={{backgroundColor: showDropdown ? '#181818' : 'rgba(23, 23, 23, 0.80)'}}
-        >
+        <div className='converter-container__content'>
             <div className='converter-container__text'>
                 Exchange rates from the Belarusian National Bank
             </div>
-
             <div className='converter-container__scroll'>
-                {curArr.map((item, index) => {
-                    return (
-                        <div className='converter-container__item' key={index}>
-                            <label className='converter-container__labels'>{item.abbreviation}:</label>
-                            <input className='converter-container__inputs'
-                                   type="text"
-                                   value={formatStringWithSpaces(""+item.amount)}
-                                   onChange={event => {
-                                       const inputValue = removeSpacesFromString(event.target.value);
-                                       console.log("input", inputValue);
-                                       const filteredValue = inputValue.replace(/[^0-9.]/g, "");
-                                       console.log("filtered", filteredValue);
-                                       if (/^[0-9.]*$/.test(inputValue)) {
-                                           if (filteredValue.split(".")[0].length <= 9) {
-                                               if (filteredValue.split(".").length < 2) {
-                                                   const formattedValue = formatStringWithSpaces(filteredValue);
-                                                   console.log(formattedValue)
-                                                   handleCurChange(index, {target: {value: formattedValue}});
-                                               } else if (filteredValue.split(".").length === 2 && filteredValue.split(".")[1].length <= 4) {
-                                                   const formattedValue = formatStringWithSpaces(filteredValue);
-                                                   console.log(formattedValue)
-                                                   handleCurChange(index, {target: {value: formattedValue}});
-                                               }
-                                           }
-                                       }
-                                   }}/>
-                            {!baseCurrencies.includes(item.abbreviation) ?
-                                <button className='converter-container__buttonDelete'
-                                        onClick={() => removeCurField(index)}
-                                >X
-                                </button>
-                                : null}
+                {showDropdown ? (
+                    <div className="converter-container__options-list">
+                        <div className="converter-container__options">
+                            {curLabels.map((item, index) => (
+                                <div
+                                    className="converter-container__option"
+                                    key={index}
+                                    style={{backgroundColor: index % 2 === 1 ? '#282828' : 'none', padding: index % 2 === 1 ? '7px 10px' : '1px 10px'}}
+                                    onClick={() => handleCurrencyToAddChange(item)}
+                                >
+                                    <div>{item.CurAbbreviation }</div>
+                                    <div className="converter-container__options-fullName"> ({item.CurFullName})</div>
+                                </div>
+                            ))}
                         </div>
-                    )
-                })}
-            </div>
-            {showDropdown && (
-                <div className="converter-container__options-list">
-                    <div className="converter-container__options">
-                        {curLabels.map((label, index) => (
-                            <div
-                                className="converter-container__option"
-                                key={index}
-                                style={{backgroundColor: index % 2 === 1 ? '#282828' : 'none', padding: index % 2 === 1 ? '7px 10px' : '1px 10px'}}
-                                onClick={() => handleCurrencyToAddChange(label)}
-                            >
-                                {label}
-                            </div>
-                        ))}
                     </div>
-                </div>
-            )}
+                ) :
+                    curArr.map((item, index) => {
+                            return (
+                                <div className='converter-container__item' key={index}>
+                                    <div className='converter-container-column__item'>
+                                        <label className='converter-container__labels'>{item.abbreviation}:</label>
+                                        <input className='converter-container__inputs'
+                                               type="text"
+                                               value={formatStringWithSpaces(""+item.amount)}
+                                               onChange={event => {
+                                                   const inputValue = removeSpacesFromString(event.target.value);
+                                                   console.log("input", inputValue);
+                                                   const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+                                                   console.log("filtered", filteredValue);
+                                                   if (/^[0-9.]*$/.test(inputValue)) {
+                                                       if (filteredValue.split(".")[0].length <= 9) {
+                                                           if (filteredValue.split(".").length < 2) {
+                                                               const formattedValue = formatStringWithSpaces(filteredValue);
+                                                               console.log(formattedValue)
+                                                               handleCurChange(index, {target: {value: formattedValue}});
+                                                           } else if (filteredValue.split(".").length === 2 && filteredValue.split(".")[1].length <= 4) {
+                                                               const formattedValue = formatStringWithSpaces(filteredValue);
+                                                               console.log(formattedValue)
+                                                               handleCurChange(index, {target: {value: formattedValue}});
+                                                           }
+                                                       }
+                                                   }
+                                               }}/>
+                                        {!baseCurrencies.includes(item.abbreviation) ?
+                                            <button className='converter-container__buttonDelete'
+                                                    onClick={() => removeCurField(index)}
+                                            >X
+                                            </button>
+                                            : null}
+                                    </div>
+                                    <input className='converter-container-column__inputs'
+                                           type="text"
+                                           value={formatStringWithSpaces(""+item.amount)}
+                                           onChange={event => {
+                                               const inputValue = removeSpacesFromString(event.target.value);
+                                               console.log("input", inputValue);
+                                               const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+                                               console.log("filtered", filteredValue);
+                                               if (/^[0-9.]*$/.test(inputValue)) {
+                                                   if (filteredValue.split(".")[0].length <= 9) {
+                                                       if (filteredValue.split(".").length < 2) {
+                                                           const formattedValue = formatStringWithSpaces(filteredValue);
+                                                           console.log(formattedValue)
+                                                           handleCurChange(index, {target: {value: formattedValue}});
+                                                       } else if (filteredValue.split(".").length === 2 && filteredValue.split(".")[1].length <= 4) {
+                                                           const formattedValue = formatStringWithSpaces(filteredValue);
+                                                           console.log(formattedValue)
+                                                           handleCurChange(index, {target: {value: formattedValue}});
+                                                       }
+                                                   }
+                                               }
+                                           }}/>
+                                </div>
+                            )
+                        })
+                }
+
+            </div>
             <div className="converter-container__item">
                 <div>
                     <div className="converter-container__select" onClick={() => setShowDropdown(!showDropdown)}>
-                        {!showDropdown ? 'Add currency' : 'Hide currency'}
+                        {!showDropdown ? 'Add currency' : 'Hide'}
                     </div>
                 </div>
             </div>

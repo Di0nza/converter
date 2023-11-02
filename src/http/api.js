@@ -8,7 +8,21 @@ export const getCurrencyLabels = async () => {
 /**
  -------------------------------------------------------------------
  Пример тела ответа:
- [ "AUD", "AMD", "BGN", ... ]
+ [
+    {
+        "CurAbbreviation": "AED",
+        "CurFullName": "UAE dirham"
+    },
+    {
+        "CurAbbreviation": "AMD",
+        "CurFullName": "Armenian dram"
+    },
+    {
+        "CurAbbreviation": "AUD",
+        "CurFullName": "Australian dollar"
+    },
+    ...
+ ]
  -------------------------------------------------------------------
  */
 
@@ -26,10 +40,12 @@ export const getCurrencies = async (form) => {
  [
      {
             "CurAbbreviation": "BYN",
+            "CurFullName": "Belarusian ruble",
             "value": 3.1958
      },
      {
             "CurAbbreviation": "USD",
+            "CurFullName": "U.S. dollar",
             "value": 1
      },
      ...
@@ -50,18 +66,22 @@ export const getSortedCurrencies = async (form) => {
  [
      {
             "CurAbbreviation": "EUR",
+            "CurFullName": "Euro",
             "value": 0.9385
      },
      {
             "CurAbbreviation": "USD",
+            "CurFullName": "U.S. dollar",
             "value": 1
      },
      {
             "CurAbbreviation": "BYN",
+            "CurFullName": "Belarusian ruble",
             "value": 3.162
      },
      {
             "CurAbbreviation": "RUB",
+            "CurFullName": "Russian ruble",
             "value": 91.9186
      }
  ]

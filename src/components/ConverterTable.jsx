@@ -4,6 +4,7 @@ import {getSavedCurrencies} from "../utils/localStorageFunctions";
 import sortArrows from '../img/arrows.svg'
 import sortArrowsUp from '../img/arrowUp.svg'
 import sortArrowsDown from '../img/arrowDown.svg'
+import {formatStringWithSpaces} from "../utils/helpers";
 
 const ConverterTable = () => {
 
@@ -70,13 +71,8 @@ const ConverterTable = () => {
                             className='converter-container__table-row'
                             style={{backgroundColor: index % 2 === 1 ? '#282828' : 'none', padding: index % 2 === 1 ? '7px 10px' : '2px 10px'}}
                         >
-                            <div>
-                                {item.abbreviation}
-                            </div>
-                            <p>
-                                {item.amount}
-                            </p>
-
+                            <div>{item.abbreviation}</div>
+                            <p>{formatStringWithSpaces(""+item.amount)}</p>
                         </div>
                     </>
                 ))}
