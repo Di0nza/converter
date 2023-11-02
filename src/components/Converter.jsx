@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './componentStyles.css'
 import {getCurrencyLabels, getCurrencies} from "../http/api";
 import {getSavedCurrencies, updateSavedCurrencies} from "../utils/localStorageFunctions";
+import {formatStringWithSpaces, removeSpacesFromString} from "../utils/helpers";
 
 const Converter = () => {
 
@@ -20,7 +21,11 @@ const Converter = () => {
     /*Состояние для выбранной к добавлению валюты*/
     const [selectedCurrencyToAdd, setSelectedCurrencyToAdd] = useState('');
 
+    /*Флаг для дропдаун меню*/
     const [showDropdown, setShowDropdown] = useState(false);
+
+    /*Таймаут для сбрасывания старых запросов при быстром вводе в инпуты*/
+    const [typingTimer, setTypingTimer] = useState(null);
 
 
     /*Добавление валюты с инпутом на страницу */
@@ -52,12 +57,19 @@ const Converter = () => {
 
     /*Обработчик изменения значений в инпутах*/
     const handleCurChange = (index, event) => {
+        const newValue = event.target.value;
         let data = [...curArr];
-        data[index].amount = event.target.value
+        data[index].amount = newValue;
         setCurArr(data);
         updateSavedCurrencies(data);
-        setConvertTrigger({abbreviation: data[index].abbreviation, amount: data[index].amount});
+        const delay = 500;
+        clearTimeout(typingTimer);
+        const newTimer = setTimeout(() => {
+            setConvertTrigger({ abbreviation: data[index].abbreviation, amount: newValue });
+        }, delay);
+        setTypingTimer(newTimer);
     };
+
 
     /*Отправка на сервер валюты-триггера, его числового значения введенного пользователем, и массива валют,
      для которых нужно провести расчет*/
@@ -82,7 +94,9 @@ const Converter = () => {
 
     /*Отслеживание изменения триггера, а так же логика с обработкой данных, если поле ввода - пустая строка*/
     useEffect(() => {
-
+        if (typingTimer) {
+            clearTimeout(typingTimer);
+        }
         if (convertTrigger.amount !== '') {
             convert(convertTrigger.abbreviation, convertTrigger.amount);
         } else {
@@ -131,12 +145,24 @@ const Converter = () => {
                             <label className='converter-container__labels'>{item.abbreviation}:</label>
                             <input className='converter-container__inputs'
                                    type="text"
-                                   value={item.amount}
+                                   value={formatStringWithSpaces(""+item.amount)}
                                    onChange={event => {
-                                       const inputValue = event.target.value;
-                                       const filteredValue = inputValue.replace(/[^0-9. ]/g, "");
-                                       if (filteredValue.split(".").length <= 2 && /^[0-9.]*$/.test(inputValue)) {
-                                           handleCurChange(index, {target: {value: filteredValue}});
+                                       const inputValue = removeSpacesFromString(event.target.value);
+                                       console.log("input", inputValue);
+                                       const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+                                       console.log("filtered", filteredValue);
+                                       if (/^[0-9.]*$/.test(inputValue)) {
+                                           if (filteredValue.split(".")[0].length <= 9) {
+                                               if (filteredValue.split(".").length < 2) {
+                                                   const formattedValue = formatStringWithSpaces(filteredValue);
+                                                   console.log(formattedValue)
+                                                   handleCurChange(index, {target: {value: formattedValue}});
+                                               } else if (filteredValue.split(".").length === 2 && filteredValue.split(".")[1].length <= 4) {
+                                                   const formattedValue = formatStringWithSpaces(filteredValue);
+                                                   console.log(formattedValue)
+                                                   handleCurChange(index, {target: {value: formattedValue}});
+                                               }
+                                           }
                                        }
                                    }}/>
                             {!baseCurrencies.includes(item.abbreviation) ?

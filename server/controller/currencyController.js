@@ -179,6 +179,13 @@ const convertedCurrencies = async (data, amount, triggerCur, curNamesArr) => {
     }
 }
 
+function removeSpacesFromString(str) {
+    if (typeof str === 'string') {
+        return str.replace(/\s/g, '');
+    }
+    return str;
+}
+
 class CurrencyController {
 
     async getCurrencies(req, res) {
@@ -192,7 +199,7 @@ class CurrencyController {
                 return res.status(422).json({error: 'Error 422. Unprocessable Entity. Wrong currency abbreviation.'});
             }
             //amount это то, что пользователь ввел в поле
-            const amount = req.body.value;
+            const amount = removeSpacesFromString(req.body.value);
             if (!(/^[0-9.]*$/.test(amount))) {
                 return res.status(422).json({error: 'Error 422. Unprocessable Entity. Wrong currency amount.'});
             }
@@ -235,7 +242,7 @@ class CurrencyController {
                 return res.status(422).json({error: 'Error 422. Unprocessable Entity. Wrong currency abbreviation.'});
             }
             //amount это то, что пользователь ввел в поле
-            const amount = req.body.value;
+            const amount = removeSpacesFromString(req.body.value);
             if (!(/^[0-9.]*$/.test(amount))) {
                 return res.status(422).json({error: 'Error 422. Unprocessable Entity. Wrong currency amount.'});
             }

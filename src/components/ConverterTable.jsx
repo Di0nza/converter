@@ -54,12 +54,12 @@ const ConverterTable = () => {
             <div className='converter-sort-container'>
                 <div className='converter-sort-btn'
                      onClick={()=> handleSortClick("abbreviation")}>
-                    <p>Title</p>
+                    <p>Abbreviation</p>
                     <img src={sortField === "abbreviation" ? (sortOrder === null ? sortArrows : (sortOrder === "asc" ? sortArrowsUp : sortArrowsDown)) : sortArrows}/>
                 </div>
                 <div className='converter-sort-btn'
                      onClick={()=> handleSortClick("value")}>
-                    <p>Conversion</p>
+                    <p>Value</p>
                     <img src={sortField === "value" ? (sortOrder === null ? sortArrows : (sortOrder === "desc" ? sortArrowsUp : sortArrowsDown)) : sortArrows}/>
                 </div>
             </div>
