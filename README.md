@@ -4,6 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## TO START PROJECT
 Open terminal and type commands: cd server, npm i, npm start
+
 Open another terminal and type commands: npm i, npm start
 
 ## Available Scripts
