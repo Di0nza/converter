@@ -55,7 +55,7 @@ const ConverterTable = () => {
             <div className='converter-sort-container'>
                 <div className='converter-sort-btn'
                      onClick={()=> handleSortClick("abbreviation")}>
-                    <p>Abbreviation</p>
+                    <p>Title</p>
                     <img src={sortField === "abbreviation" ? (sortOrder === null ? sortArrows : (sortOrder === "asc" ? sortArrowsUp : sortArrowsDown)) : sortArrows}/>
                 </div>
                 <div className='converter-sort-btn'

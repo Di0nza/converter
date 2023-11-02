@@ -131,57 +131,28 @@ const Converter = () => {
             </div>
             <div className='converter-container__scroll'>
                 {showDropdown ? (
-                    <div className="converter-container__options-list">
-                        <div className="converter-container__options">
-                            {curLabels.map((item, index) => (
-                                <div
-                                    className="converter-container__option"
-                                    key={index}
-                                    style={{backgroundColor: index % 2 === 1 ? '#282828' : 'none', padding: index % 2 === 1 ? '7px 10px' : '1px 10px'}}
-                                    onClick={() => handleCurrencyToAddChange(item)}
-                                >
-                                    <div>{item.CurAbbreviation }</div>
-                                    <div className="converter-container__options-fullName"> ({item.CurFullName})</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ) :
-                    curArr.map((item, index) => {
-                            return (
-                                <div className='converter-container__item' key={index}>
-                                    <div className='converter-container-column__item'>
-                                        <label className='converter-container__labels'>{item.abbreviation}:</label>
-                                        <input className='converter-container__inputs'
-                                               type="text"
-                                               value={formatStringWithSpaces(""+item.amount)}
-                                               onChange={event => {
-                                                   const inputValue = removeSpacesFromString(event.target.value);
-                                                   console.log("input", inputValue);
-                                                   const filteredValue = inputValue.replace(/[^0-9.]/g, "");
-                                                   console.log("filtered", filteredValue);
-                                                   if (/^[0-9.]*$/.test(inputValue)) {
-                                                       if (filteredValue.split(".")[0].length <= 9) {
-                                                           if (filteredValue.split(".").length < 2) {
-                                                               const formattedValue = formatStringWithSpaces(filteredValue);
-                                                               console.log(formattedValue)
-                                                               handleCurChange(index, {target: {value: formattedValue}});
-                                                           } else if (filteredValue.split(".").length === 2 && filteredValue.split(".")[1].length <= 4) {
-                                                               const formattedValue = formatStringWithSpaces(filteredValue);
-                                                               console.log(formattedValue)
-                                                               handleCurChange(index, {target: {value: formattedValue}});
-                                                           }
-                                                       }
-                                                   }
-                                               }}/>
-                                        {!baseCurrencies.includes(item.abbreviation) ?
-                                            <button className='converter-container__buttonDelete'
-                                                    onClick={() => removeCurField(index)}
-                                            >X
-                                            </button>
-                                            : null}
+                        <div className="converter-container__options-list">
+                            <div className="converter-container__options">
+                                {curLabels.map((item, index) => (
+                                    <div
+                                        className="converter-container__option"
+                                        key={index}
+                                        style={{backgroundColor: index % 2 === 1 ? '#282828' : 'none', padding: index % 2 === 1 ? '7px 10px' : '1px 10px'}}
+                                        onClick={() => handleCurrencyToAddChange(item)}
+                                    >
+                                        <div>{item.CurAbbreviation }</div>
+                                        <div className="converter-container__options-fullName"> ({item.CurFullName})</div>
                                     </div>
-                                    <input className='converter-container-column__inputs'
+                                ))}
+                            </div>
+                        </div>
+                    ) :
+                    curArr.map((item, index) => {
+                        return (
+                            <div className='converter-container__item' key={index}>
+                                <div className='converter-container-column__item'>
+                                    <label className='converter-container__labels'>{item.abbreviation}:</label>
+                                    <input className='converter-container__inputs'
                                            type="text"
                                            value={formatStringWithSpaces(""+item.amount)}
                                            onChange={event => {
@@ -203,9 +174,38 @@ const Converter = () => {
                                                    }
                                                }
                                            }}/>
+                                    {!baseCurrencies.includes(item.abbreviation) ?
+                                        <button className='converter-container__buttonDelete'
+                                                onClick={() => removeCurField(index)}
+                                        >X
+                                        </button>
+                                        : null}
                                 </div>
-                            )
-                        })
+                                <input className='converter-container-column__inputs'
+                                       type="text"
+                                       value={formatStringWithSpaces(""+item.amount)}
+                                       onChange={event => {
+                                           const inputValue = removeSpacesFromString(event.target.value);
+                                           console.log("input", inputValue);
+                                           const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+                                           console.log("filtered", filteredValue);
+                                           if (/^[0-9.]*$/.test(inputValue)) {
+                                               if (filteredValue.split(".")[0].length <= 9) {
+                                                   if (filteredValue.split(".").length < 2) {
+                                                       const formattedValue = formatStringWithSpaces(filteredValue);
+                                                       console.log(formattedValue)
+                                                       handleCurChange(index, {target: {value: formattedValue}});
+                                                   } else if (filteredValue.split(".").length === 2 && filteredValue.split(".")[1].length <= 4) {
+                                                       const formattedValue = formatStringWithSpaces(filteredValue);
+                                                       console.log(formattedValue)
+                                                       handleCurChange(index, {target: {value: formattedValue}});
+                                                   }
+                                               }
+                                           }
+                                       }}/>
+                            </div>
+                        )
+                    })
                 }
 
             </div>
