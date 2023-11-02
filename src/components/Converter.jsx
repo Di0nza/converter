@@ -20,14 +20,20 @@ const Converter = () => {
     /*Состояние для выбранной к добавлению валюты*/
     const [selectedCurrencyToAdd, setSelectedCurrencyToAdd] = useState('');
 
+    const [showDropdown, setShowDropdown] = useState(false);
+
+
     /*Добавление валюты с инпутом на страницу */
-    const handleCurrencyToAddChange = (event) => {
-        setSelectedCurrencyToAdd(event.target.value);
-        setCurArr([...curArr, {abbreviation: event.target.value, amount: ''}]);
-        updateSavedCurrencies([...curArr, {abbreviation: event.target.value, amount: ''}]);
-        setCurLabels(curLabels.filter((currency) => currency !== event.target.value));
-        setConvertTrigger({abbreviation: curArr[0].abbreviation, amount: curArr[0].amount});
+    const handleCurrencyToAddChange = (selectedCurrency) => {
+        setSelectedCurrencyToAdd(selectedCurrency);
+        const updatedCurArr = [...curArr, { abbreviation: selectedCurrency, amount: '' }];
+        setCurArr(updatedCurArr);
+        updateSavedCurrencies(updatedCurArr);
+        setCurLabels(curLabels.filter((currency) => currency !== selectedCurrency));
+        setConvertTrigger({ abbreviation: updatedCurArr[0].abbreviation, amount: updatedCurArr[0].amount });
         //вызываю, чтобы произошла конвертация, после добавления новой валюты на страницу, можно было просто вызвать функцию convert()
+        setShowDropdown(false);
+
     };
 
     /*Удаление валюты с инпутом со страницы*/
@@ -111,50 +117,59 @@ const Converter = () => {
     }, [])
 
     return (
-        <div className='converter-container__content'>
+        <div className='converter-container__content'
+             style={{backgroundColor: showDropdown ? '#181818' : 'rgba(23, 23, 23, 0.80)'}}
+        >
             <div className='converter-container__text'>
-                Exchange rates from the National Bank
+                Exchange rates from the Belarusian National Bank
             </div>
 
-            {curArr.map((item, index) => {
-                return (
-                    <div className='converter-container__item' key={index}>
-                        <label className='converter-container__labels'>{item.abbreviation}:</label>
-                        <input className='converter-container__inputs'
-                               type="text"
-                               value={item.amount}
-                               onChange={event => {
-                                   const inputValue = event.target.value;
-                                   const filteredValue = inputValue.replace(/[^0-9. ]/g, "");
-                                   if (filteredValue.split(".").length <= 2 && /^[0-9.]*$/.test(inputValue)) {
-                                       handleCurChange(index, {target: {value: filteredValue}});
-                                   }
-                               }}/>
-                        {!baseCurrencies.includes(item.abbreviation) ?
-                            <button className='converter-container__buttonDelete'
-                                    onClick={() => removeCurField(index)}
-                            >X
-                            </button>
-                            : null}
+            <div className='converter-container__scroll'>
+                {curArr.map((item, index) => {
+                    return (
+                        <div className='converter-container__item' key={index}>
+                            <label className='converter-container__labels'>{item.abbreviation}:</label>
+                            <input className='converter-container__inputs'
+                                   type="text"
+                                   value={item.amount}
+                                   onChange={event => {
+                                       const inputValue = event.target.value;
+                                       const filteredValue = inputValue.replace(/[^0-9. ]/g, "");
+                                       if (filteredValue.split(".").length <= 2 && /^[0-9.]*$/.test(inputValue)) {
+                                           handleCurChange(index, {target: {value: filteredValue}});
+                                       }
+                                   }}/>
+                            {!baseCurrencies.includes(item.abbreviation) ?
+                                <button className='converter-container__buttonDelete'
+                                        onClick={() => removeCurField(index)}
+                                >X
+                                </button>
+                                : null}
+                        </div>
+                    )
+                })}
+            </div>
+            {showDropdown && (
+                <div className="converter-container__options-list">
+                    <div className="converter-container__options">
+                        {curLabels.map((label, index) => (
+                            <div
+                                className="converter-container__option"
+                                key={index}
+                                style={{backgroundColor: index % 2 === 1 ? '#282828' : 'none', padding: index % 2 === 1 ? '7px 10px' : '1px 10px'}}
+                                onClick={() => handleCurrencyToAddChange(label)}
+                            >
+                                {label}
+                            </div>
+                        ))}
                     </div>
-                )
-            })}
-
+                </div>
+            )}
             <div className="converter-container__item">
                 <div>
-                    <select
-                        className="converter-container__select"
-                        id="currencyDropdown"
-                        onChange={handleCurrencyToAddChange}
-                        value={selectedCurrencyToAdd}
-                    >
-                        <option className="converter-container__option" value=""> + Add currency</option>
-                        {curLabels.map((label, index) => (
-                            <option className="converter-container__option" key={index} value={label}>
-                                {label}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="converter-container__select" onClick={() => setShowDropdown(!showDropdown)}>
+                        {!showDropdown ? 'Add currency' : 'Hide currency'}
+                    </div>
                 </div>
             </div>
         </div>

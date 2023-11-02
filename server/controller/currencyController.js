@@ -10,7 +10,6 @@ const rates = async () => {
             for (const item of data) {
                 await new Currency({
                     abbreviation: item.Cur_Abbreviation,
-                    name: item.Cur_Name,
                     scale: item.Cur_Scale,
                     rate: item.Cur_OfficialRate
                 }).save();
@@ -204,6 +203,7 @@ class CurrencyController {
                 return res.status(422).json({error: 'Error 422. Unprocessable Entity. Wrong currency array.'});
             }
 
+
             const resultConversion = await convertedCurrencies(data, amount, triggerCur, curNamesArr);
 
             return res.json(resultConversion)
@@ -266,9 +266,9 @@ class CurrencyController {
                 if(sortField !== null && sortOrder !== null) {
                     if (sortField === 'abbreviation') {
                         if (sortOrder === 'desc') {
-                            return a.abbreviation.localeCompare(b.abbreviation);
+                            return a.CurAbbreviation.localeCompare(b.CurAbbreviation);
                         } else if (sortOrder === 'asc') {
-                            return b.abbreviation.localeCompare(a.abbreviation);
+                            return b.CurAbbreviation.localeCompare(a.CurAbbreviation);
                         }
                     } else if (sortField === 'value') {
                         if (sortOrder === 'desc') {
@@ -285,7 +285,6 @@ class CurrencyController {
             return res.json(sortedResultConversion);
         } catch (e) {
             console.log(e.message);
-            return res.status(500).message('ERROR 500. INTERNAL SERVER ERROR.')
         }
     }
 }

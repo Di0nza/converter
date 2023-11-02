@@ -9,20 +9,76 @@
     /* Другие форматы шрифта могут быть добавлены здесь */
 }
 
-.converter-container__content{
-    padding: 15px 35px 20px 15px;
+::-webkit-scrollbar {
+    width: 8px;
+    margin-right: 10px;
+
 }
 
+/* трек (бар) */
+::-webkit-scrollbar-track {
+
+}
+
+/* полоса прокрутки */
+::-webkit-scrollbar-thumb {
+    width: 8px;
+    background: #888;
+    border-radius: 10px;
+}
+
+/* уголки полосы прокрутки */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.converter-main-container{
+    display: flex;
+}
+
+.converter-container__content{
+    width: 100%;
+    position: relative;
+    z-index: 0;
+    padding: 5px 0 5px 0;
+    background: rgba(23, 23, 23, 0.80);
+    border-radius: 0 0 20px 20px;
+    backdrop-filter: blur(7.5px);
+}
+.converter-sort-container{
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 40px);
+    padding: 0 20px;
+    margin: 15px 0;
+    justify-content: space-between;
+}
+.converter-sort-btn{
+    display: flex;
+    flex-direction: row;
+    width: calc(50% - 40px);
+    background-color: #303030;
+    border-radius: 10px;
+    justify-content: space-between;
+    padding: 10px 15px ;
+    cursor: pointer;
+}
+.converter-sort-btn p{
+    color: white;
+    margin: 0;
+    font-size: 25px;
+    font-family: 'VT323', sans-serif;
+}
 .converter-container__button{
     margin: 10px;
-    width: 30%; /* Ширина инпута */
-    padding: 8px 8px 8px 8px; /* Внутренний отступ */
-    border: none; /* Убираем границу инпута */
-    background: rgba(84, 84, 84, 0.50); /* Полупрозрачный фон */
-    backdrop-filter: blur(5px); /* Применяем размытие фона */
-    border-radius: 5px; /* Скругляем углы */
-    color: #ffffff; /* Цвет текста */
-    font-size: 2rem; /* Размер шрифта */
+    width: 30%;
+    padding: 8px 8px 8px 8px;
+    border: none;
+    background: rgba(84, 84, 84, 0.50);
+    backdrop-filter: blur(5px);
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 2rem;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     font-family: 'VT323', sans-serif;
 }
@@ -33,72 +89,135 @@
     padding: 0;
     margin: 0;
     cursor: pointer;
+    width: 50px;
     color: #ffffff; /* Цвет текста */
-    font-size: 2rem; /* Размер шрифта */
+    font-size: 35px; /* Размер шрифта */
     text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     font-family: 'VT323', sans-serif;
 }
 
 .converter-container__inputs{
     margin: 10px;
-    width: 30%; /* Ширина инпута */
+    width: calc(100% - 150px); /* Ширина инпута */
     padding: 15px 8px 8px 8px; /* Внутренний отступ */
-    border: none; /* Убираем границу инпута */
-    background: rgba(84, 84, 84, 0.50); /* Полупрозрачный фон */
-    backdrop-filter: blur(5px); /* Применяем размытие фона */
-    border-radius: 5px; /* Скругляем углы */
+    background: rgba(84, 84, 84, 0.0);
+    border: 2px solid #656966;
+    border-radius: 10px; /* Скругляем углы */
     color: #ffffff; /* Цвет текста */
     font-size: 25px; /* Размер шрифта */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     font-family: 'Square Deal Font', sans-serif;
     letter-spacing: 1px;
+    caret-shape: inherit;
+    transition: 0.3s;
 }
 
 .converter-container__inputs:focus{
-    outline: none;
-    box-shadow: 0 0 20px rgba(51, 48, 48, 0.8);
-    border: none;
-    background: transparent;
+    background: rgba(84, 84, 84, 0.1);
+    border: 2px solid #ffffff;
 }
 
 .converter-container__inputs::-webkit-input-placeholder {
-    color: transparent; /* Делаем текст плейсхолдера прозрачным, чтобы скрыть каретку */
+    margin-top: -10px;
+    color: rgba(23, 23, 23, 0.80); /* Делаем текст плейсхолдера прозрачным, чтобы скрыть каретку */
+}
+.converter-container__scroll{
+    position: relative;
+    width: calc(100% - 30px);
+    max-height: 340px;
+    margin: 0 0 20px 20px;
+    overflow-y: scroll;
+    z-index: 1;
+}
+.converter-container__item{
+    position: relative;
+    z-index: 6;
+    width: 100%;
 }
 
 .converter-container__labels{
     /*font-family: 'Koulen', sans-serif;*/
     font-family: 'VT323', sans-serif;
     color: white;
-    font-size: 2rem;
+    font-size: 35px;
+    width: 100px;
 }
 
 
 .converter-container__text{
-    padding: 10px;
+    padding: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'VT323', sans-serif;
-    font-size: 40px;
+    font-size: 25px;
     color: white;
     text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-.converter-container__select {
-    margin: 10px;
-    width: 30%; /* Ширина инпута */
-    padding: 8px 8px 8px 8px; /* Внутренний отступ */
-    border: none; /* Убираем границу инпута */
-    background: rgba(84, 84, 84, 0.50); /* Полупрозрачный фон */
-    backdrop-filter: blur(5px); /* Применяем размытие фона */
-    border-radius: 5px; /* Скругляем углы */
-    color: #ffffff; /* Цвет текста */
-    font-size: 2rem; /* Размер шрифта */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    font-family: 'VT323', sans-serif;
-    max-height: 200px; /* Устанавливаем желаемую максимальную высоту */
+.converter-container__options-list{
+    background-color: #181818;
+    width: calc(100% - 30px);
+    margin-top: 10px;
+    padding: 0 0 0 20px;
+    height: 410px;
+    max-height: 380px;
+    overflow-y: scroll;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 6;
 }
-
+.converter-container__option{
+    width: calc(100% - 32px);
+    font-size: 30px;
+    border-radius: 10px;
+    margin: 5px 0;
+    padding-bottom: 10px;
+    font-family: 'VT323', sans-serif;
+    color: white;
+    cursor: pointer;
+}
+.converter-container__select {
+    width: calc(100% - 55px);
+    padding: 9px 8px 9px 8px;
+    margin: 0 20px 20px 20px;
+    border: none;
+    background: rgba(84, 84, 84, 0.50);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 25px;
+    font-family: 'VT323', sans-serif;
+    max-height: 200px;
+    text-align: center;
+    cursor: pointer;
+}
+.converter-container__table{
+    margin: 10px 10px 10px 20px;
+    display: flex;
+    padding-right: 10px;
+    flex-direction: column;
+    max-height: 375px;
+    overflow-y: scroll;
+}
+.converter-container__table-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    margin: 3px 0;
+    padding: 7px 10px;
+    border-radius: 10px;
+    font-size: 31px;
+}
+.converter-container__table-row div{
+    font-family: 'VT323', sans-serif;
+}
+.converter-container__table-row p{
+    margin: 7px 0 0 0;
+    font-size: 23px;
+}
 .converter-container__select:focus{
     outline: none;
     border: none;

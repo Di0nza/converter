@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {Canvas, useFrame} from "@react-three/fiber";
+import {Canvas, useFrame, useThree} from "@react-three/fiber";
 import ConverterFactory from './Factory'
 import './componentStyles.css'
 import {OrbitControls} from "@react-three/drei";
@@ -11,11 +11,13 @@ function Rig() {
     })
 }
 
-
 const ThreeBackground = () => {
-    return (
-        <Canvas className='canvas' camera={{position: [4, 2.1, 3], fov: 28}}>
 
+    const {viewPort} = useThree();
+    const isMobile = window.innerWidth < 768;
+
+    return (
+        <Canvas camera={{position: [4, 2.1, 3], fov: 28}}>
             <OrbitControls enableRotate={false} enableZoom={false}/>
             <group position={[-1, -2.3, -3]}>
                 <Suspense fallback={null}>
